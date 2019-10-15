@@ -1,7 +1,7 @@
 default: none
 
 GHDL ?= /opt/ghdl/bin/ghdl
-TYPE ?= wallace
+TYPE ?= wallace # dadda
 SIZE ?= 32
 CYCLE ?= 1000
 
