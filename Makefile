@@ -11,5 +11,4 @@ osvvm:
 run:
 	sim/run.sh ${GHDL} ${TYPE} ${SIZE} ${CYCLE}
 
-all:
-	osvvm run
+all: osvvm run
