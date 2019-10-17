@@ -1,2 +1,3 @@
-# orphan-multiplier-generator
-Wallace and Dadda multiplier generator for vhdl
+# Orphan Multiplier Generator
+
+This tool generates **Wallace** and **Dadda** multiplier tree for given **_size_** in hardware description language **vhdl**.
