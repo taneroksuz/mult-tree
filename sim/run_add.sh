@@ -2,9 +2,9 @@
 
 if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]
 then
-  echo "1. option: ghdl, xsim"
-  echo "2. option: dadda, wallace"
-  echo "3. option: * <tree size (for N x N multiplication type only N)>"
+  echo "1. option: ghdl"
+  echo "2. option: add, sub"
+  echo "3. option: * <bits (for N bits type only N)>"
   echo "4. option: * <cycles (default value is 1000)>"
   exit
 fi
@@ -22,10 +22,10 @@ SIMULA="${ghdl} -r --std=08 --ieee=synopsys"
 
 mkdir sim/work
 
-if [ "$2" = 'dadda' ]
+if [ "$2" = 'add' ]
 then
   TYP=0
-elif [ "$2" = 'wallace' ]
+elif [ "$2" = 'sub' ]
 then
   TYP=1
 fi
@@ -36,20 +36,6 @@ then
 else
   CYCLES="$4"
 fi
-
-cd src/cpp
-make clean
-make
-
-if [ $TYP = 0 ] || [ $TYP = 1 ]
-then
-  ./multiply_tree dadda $3
-  ./multiply_tree wallace $3
-  mv dadda.vhd ../../src/vhdl/
-  mv wallace.vhd ../../src/vhdl/
-fi
-
-cd -
 
 cd sim/work
 
@@ -93,7 +79,6 @@ $ANALYS ../../tools/OSVVM/RandomPkg.vhd
 $SYNTAX ../../src/vhdl/configure.vhd
 $ANALYS ../../src/vhdl/configure.vhd
 
-
 $SYNTAX ../../src/vhdl/wire.vhd
 $ANALYS ../../src/vhdl/wire.vhd
 $SYNTAX ../../src/vhdl/libs.vhd
@@ -105,16 +90,17 @@ $SYNTAX ../../src/vhdl/ha.vhd
 $ANALYS ../../src/vhdl/ha.vhd
 $SYNTAX ../../src/vhdl/fa.vhd
 $ANALYS ../../src/vhdl/fa.vhd
+$SYNTAX ../../src/vhdl/cla.vhd
+$ANALYS ../../src/vhdl/cla.vhd
+$SYNTAX ../../src/vhdl/cra.vhd
+$ANALYS ../../src/vhdl/cra.vhd
+$SYNTAX ../../src/vhdl/csa.vhd
+$ANALYS ../../src/vhdl/csa.vhd
+$SYNTAX ../../src/vhdl/add.vhd
+$ANALYS ../../src/vhdl/add.vhd
 
-$SYNTAX ../../src/vhdl/dadda.vhd
-$ANALYS ../../src/vhdl/dadda.vhd
-$SYNTAX ../../src/vhdl/wallace.vhd
-$ANALYS ../../src/vhdl/wallace.vhd
-$SYNTAX ../../src/vhdl/mul.vhd
-$ANALYS ../../src/vhdl/mul.vhd
+$SYNTAX ../../src/tb/test_adder.vhd
+$ANALYS ../../src/tb/test_adder.vhd
 
-$SYNTAX ../../src/tb/test_multiply.vhd
-$ANALYS ../../src/tb/test_multiply.vhd
-
-$ELABOR test_multiply
-$SIMULA test_multiply --stop-time=${CYCLES}ps --wave=output.ghw
+$ELABOR test_adder
+$SIMULA test_adder --stop-time=${CYCLES}ps --wave=output.ghw
