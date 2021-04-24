@@ -15,10 +15,10 @@ fi
 
 ghdl=$1
 
-SYNTAX="${ghdl} -s --std=08 --ieee=synopsys"
-ANALYS="${ghdl} -a --std=08 --ieee=synopsys"
-ELABOR="${ghdl} -e --std=08 --ieee=synopsys"
-SIMULA="${ghdl} -r --std=08 --ieee=synopsys"
+SYNTAX="${ghdl} -s --std=08 --ieee=synopsys -Wno-hide"
+ANALYS="${ghdl} -a --std=08 --ieee=synopsys -Wno-hide"
+ELABOR="${ghdl} -e --std=08 --ieee=synopsys -Wno-hide"
+SIMULA="${ghdl} -r --std=08 --ieee=synopsys -Wno-hide"
 
 mkdir sim/work
 

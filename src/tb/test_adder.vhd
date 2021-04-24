@@ -58,9 +58,9 @@ architecture behavior of test_adder is
 		constant fail : string := "TEST FAILED";
 	begin
 		if ss = '0' then
-			report succ & " => " & to_hstring(aa) & " * " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr);
+			report succ & " => " & to_hstring(aa) & " + " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr);
 		else
-			report fail & " => " & to_hstring(aa) & " * " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr) severity error;
+			report fail & " => " & to_hstring(aa) & " + " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr) severity error;
 		end if;
 	end procedure check;
 
