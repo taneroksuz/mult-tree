@@ -3,12 +3,17 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.std_logic_textio.all;
 
 use work.randombasepkg.all;
 use work.randompkg.all;
 
 use work.configure.all;
 use work.wire.all;
+
+library std;
+use std.textio.all;
+use std.env.all;
 
 entity test_adder is
 	generic(
@@ -40,6 +45,24 @@ architecture behavior of test_adder is
 			add_o : out add_out_type
 		);
 	end component;
+
+	procedure check(
+		aa : in std_logic_vector(XLEN-1 downto 0);
+		bb : in std_logic_vector(XLEN-1 downto 0);
+		pp : in std_logic_vector(XLEN-1 downto 0);
+		qq : in std_logic_vector(XLEN-1 downto 0);
+		rr : in std_logic_vector(XLEN-1 downto 0);
+		ss : in std_logic) is
+		variable buf : line;
+		constant succ : string := "TEST SUCCEEDED";
+		constant fail : string := "TEST FAILED";
+	begin
+		if ss = '0' then
+			report succ & " => " & to_hstring(aa) & " * " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr);
+		else
+			report fail & " => " & to_hstring(aa) & " * " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr) severity error;
+		end if;
+	end procedure check;
 
 begin
 
@@ -99,17 +122,7 @@ begin
 
 		if rising_edge(clock) then
 
-			if s = '1' then
-
-				report "WRONG RESULT!!!";
-				report "a:" & to_hstring(a);
-				report "b:" & to_hstring(b);
-				report "p:" & to_hstring(p);
-				report "q:" & to_hstring(q);
-				report "r:" & to_hstring(r);
-				std.env.finish;
-
-			end if;
+			check(a,b,p,q,r,s);
 
 		end if;
 
