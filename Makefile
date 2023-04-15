@@ -1,18 +1,18 @@
 default: none
 
-GHDL ?= /opt/ghdl/bin/ghdl
-TYPE_MUL ?= wallace # dadda
-TYPE_ADD ?= add # sub
-SIZE ?= 32
-CYCLE ?= 1000
+export NVC ?= /opt/nvc/bin/nvc
+export TYPE_MUL ?= wallace# wallace dadda
+export TYPE_ADD ?= add# add sub
+export SIZE ?= 32
+export MAXTIME ?= 1000
 
-osvvm:
-	cd tools; ./osvvm.sh
+nvc:
+	cd tools; ./nvc.sh
 
 run_mul:
-	sim/run_mul.sh ${GHDL} ${TYPE_MUL} ${SIZE} ${CYCLE}
+	sim/run_mul.sh
 
 run_add:
-	sim/run_add.sh ${GHDL} ${TYPE_ADD} ${SIZE} ${CYCLE}
+	sim/run_add.sh
 
-all: osvvm run_mul run_add
+all: nvc run_mul run_add

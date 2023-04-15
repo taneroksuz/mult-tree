@@ -5,8 +5,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_textio.all;
 
-use work.randombasepkg.all;
-use work.randompkg.all;
+library osvvm;
+use osvvm.randombasepkg.all;
+use osvvm.randompkg.all;
 
 use work.configure.all;
 use work.wire.all;
@@ -23,6 +24,14 @@ entity test_multiply is
 end entity test_multiply;
 
 architecture behavior of test_multiply is
+
+	procedure print(
+		msg : in string) is
+		variable buf : line;
+	begin
+		write(buf, msg);
+		writeline(output, buf);
+	end procedure print;
 
 	signal reset : std_logic := '0';
 	signal clock : std_logic := '0';
@@ -55,13 +64,13 @@ architecture behavior of test_multiply is
 		rr : in std_logic_vector(2*XLEN-1 downto 0);
 		ss : in std_logic) is
 		variable buf : line;
-		constant succ : string := "TEST SUCCEEDED";
-		constant fail : string := "TEST FAILED";
 	begin
 		if ss = '0' then
-			report succ & " => " & to_hstring(aa) & " * " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr);
+			print(character'val(27) & "[1;32m" & "TEST SUCCEEDED" & character'val(27) & "[0m");
+			print(to_hstring(aa) & " * " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr));
 		else
-			report fail & " => " & to_hstring(aa) & " * " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr) severity error;
+			print(character'val(27) & "[1;32m" & "TEST FAILED" & character'val(27) & "[0m");
+			print(to_hstring(aa) & " * " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr));
 		end if;
 	end procedure check;
 
