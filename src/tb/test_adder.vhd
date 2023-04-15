@@ -91,7 +91,7 @@ begin
 				a <= empty;
 				b <= empty;
 
-				rv.initseed(rv'instance_name);
+				rv.initseed(SEED);
 
 			else
 

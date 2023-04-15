@@ -30,6 +30,8 @@ then
   mv wallace.vhd ../../src/vhdl/
 fi
 
+TIME=$(date +%s)
+
 cd -
 
 cd sim/work
@@ -45,6 +47,7 @@ echo "use ieee.numeric_std.all;" >> configure.vhd
 echo "" >> configure.vhd
 echo "package configure is" >> configure.vhd
 echo "  constant XLEN : integer := "$SIZE";" >> configure.vhd
+echo "  constant SEED : integer := "$TIME";" >> configure.vhd
 echo "  constant TYP  : std_logic := '"$TYP"';" >> configure.vhd
 echo "end package;" >> configure.vhd
 
