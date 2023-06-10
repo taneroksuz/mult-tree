@@ -40,6 +40,7 @@ module test_multiply();
 	initial begin
 		$dumpfile("output.vcd");
 		$dumpvars(0,test_multiply);
+		$urandom(SEED);
 	end
 
 	initial begin
@@ -65,8 +66,8 @@ module test_multiply();
 	assign s = |(r);
 
 	always begin
-		a = $urandom(SEED);
-		b = $urandom(SEED);
+		a = $urandom();
+		b = $urandom();
 		@(posedge clock);
 		check(a,b,p,q,r,s);
 	end

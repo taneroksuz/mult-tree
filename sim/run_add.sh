@@ -84,14 +84,17 @@ then
 
   mv configure.sv ../../src/verilog/
 
-  $IVERILOG -g2012 -o test_adder ../../src/verilog/configure.sv \
+  $VERILATOR --binary --trace --trace-structs --top-module test_adder \
+                                 ../../src/verilog/configure.sv \
                                  ../../src/verilog/mutex.sv \
                                  ../../src/verilog/ha.sv \
                                  ../../src/verilog/fa.sv \
                                  ../../src/verilog/cla.sv \
                                  ../../src/verilog/add.sv \
-                                 ../../src/tb/verilog/test_adder.sv
+                                 ../../src/tb/verilog/test_adder.sv 2>&1 > /dev/null
 
-  $VVP test_adder
+  make -s -j -C obj_dir/ -f Vtest_adder.mk Vtest_adder
+
+  obj_dir/Vtest_adder
 
 fi

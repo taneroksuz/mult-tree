@@ -14,6 +14,8 @@ module cla
 	timeunit 1ps;
 	timeprecision 1ps;
 
+	/* verilator lint_off UNOPTFLAT */
+
 	genvar i;
 
 	logic [SIZE-1 : 0] sum;
@@ -27,7 +29,7 @@ module cla
 
 	assign c_i[1] = c_g[0] | (c_p[0] & c_in);
 
-	for (i = 1; i< SIZE-1; i++) begin
+	for (i = 1; i < SIZE-1; i++) begin
 		assign c_i[i+1] = c_g[i] | (c_p[i] & c_i[i]);
 	end
 
@@ -35,5 +37,7 @@ module cla
 
 	assign s[0] = sum[0] ^ c_in;
 	assign s[SIZE-1:1] = sum[SIZE-1:1] ^ c_i[SIZE-1:1];
+
+	/* verilator lint_on UNOPTFLAT */
 
 endmodule

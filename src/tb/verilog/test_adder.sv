@@ -45,6 +45,7 @@ module test_adder();
 	initial begin
 		$dumpfile("output.vcd");
 		$dumpvars(0,test_adder);
+		$urandom(SEED);
 	end
 
 	initial begin
@@ -71,8 +72,8 @@ module test_adder();
 	assign s = |(r);
 
 	always begin
-		a = $urandom(SEED);
-		b = $urandom(SEED);
+		a = $urandom();
+		b = $urandom();
 		@(posedge clock);
 		check(a,b,p,q,r,s,op);
 	end

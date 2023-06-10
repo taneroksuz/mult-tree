@@ -14,8 +14,9 @@ module add
 	timeprecision 1ps;
 
 	logic [XLEN-1 : 0] data1_xor;
+	logic [0 : 0] carry;
 
-	assign data1_xor = data1 ^ op;
+	assign data1_xor = data1 ^ {XLEN{op}};
 
 	cla #(
 		.SIZE (XLEN)
@@ -24,7 +25,8 @@ module add
 		.a (data0),
 		.b (data1_xor),
 		.c_in (op),
-		.s (result) 
+		.s (result),
+		.c_out (carry)
 	);
 
 endmodule

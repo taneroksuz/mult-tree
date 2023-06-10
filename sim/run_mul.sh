@@ -100,15 +100,18 @@ then
 
   mv configure.sv ../../src/verilog/
 
-  $IVERILOG -g2012 -o test_multiply ../../src/verilog/configure.sv \
+  $VERILATOR --binary --trace --trace-structs --top-module test_multiply \
+                                 ../../src/verilog/configure.sv \
                                  ../../src/verilog/mutex.sv \
                                  ../../src/verilog/ha.sv \
                                  ../../src/verilog/fa.sv \
                                  ../../src/verilog/dadda.sv \
                                  ../../src/verilog/wallace.sv \
                                  ../../src/verilog/mul.sv \
-                                 ../../src/tb/verilog/test_multiply.sv
+                                 ../../src/tb/verilog/test_multiply.sv 2>&1 > /dev/null
 
-  $VVP test_multiply
+  make -s -j -C obj_dir/ -f Vtest_multiply.mk Vtest_multiply
+
+  obj_dir/Vtest_multiply
 
 fi

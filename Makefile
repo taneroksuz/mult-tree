@@ -1,8 +1,7 @@
 default: none
 
 export GHDL ?= /opt/ghdl/bin/ghdl
-export IVERILOG ?= /opt/iverilog/bin/iverilog
-export VVP ?= /opt/iverilog/bin/vvp
+export VERILATOR ?= /opt/verilator/bin/verilator
 export TYPE_MUL ?= wallace# wallace dadda
 export TYPE_ADD ?= add# add sub
 export SIZE ?= 32
