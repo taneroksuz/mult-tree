@@ -21,7 +21,7 @@ public:
   int i;
   int j;
   PP(int i,int j);
-  string print();
+  string print(string lang);
 };
 
 PP::PP(int i,int j)
@@ -30,15 +30,27 @@ PP::PP(int i,int j)
   this->j = j;
 }
 
-string PP::print()
+string PP::print(string lang = "vhdl")
 {
   string out = "";
-  if (this->i>=0 && this->j>=0)
-    out = "P("+to_string(this->i)+")("+to_string(this->j)+")";
-  if (this->i>=0 && this->j<0)
-    out = "S("+to_string(this->i)+")";
-  if (this->i<0 && this->j>=0)
-    out = "C("+to_string(this->j)+")";
+  if (lang.compare("vhdl") == 0)
+  {
+    if (this->i>=0 && this->j>=0)
+      out = "P("+to_string(this->i)+")("+to_string(this->j)+")";
+    if (this->i>=0 && this->j<0)
+      out = "S("+to_string(this->i)+")";
+    if (this->i<0 && this->j>=0)
+      out = "C("+to_string(this->j)+")";
+  }
+  else
+  {
+    if (this->i>=0 && this->j>=0)
+      out = "P["+to_string(this->i)+"]["+to_string(this->j)+"]";
+    if (this->i>=0 && this->j<0)
+      out = "S["+to_string(this->i)+"]";
+    if (this->i<0 && this->j>=0)
+      out = "C["+to_string(this->j)+"]";
+  }
   return out;
 }
 
@@ -52,7 +64,7 @@ public:
   string cout;
   int type;
   ADD(string a,string b,string cin,string s,string cout,int type);
-  string Print(int id);
+  string Print(int id,string lang);
   friend ostream &operator<<(ostream &out, const ADD &obj);
 };
 
@@ -66,16 +78,30 @@ ADD::ADD(string a,string b,string cin,string s,string cout,int type)
   this->type = type;
 }
 
-string ADD::Print(int id)
+string ADD::Print(int id,string lang = "vhdl")
 {
   stringstream adder;
-  if (this->type==0)
+  if (lang.compare("vhdl") == 0)
   {
-    adder << "  HA_"<< format_account_number(id) <<" : ha port map ("<<this->a<<","<<this->b<<","<<this->s<<","<<this->cout<<");";
+    if (this->type==0)
+    {
+      adder << "  HA_"<< format_account_number(id) <<" : ha port map ("<<this->a<<","<<this->b<<","<<this->s<<","<<this->cout<<");";
+    }
+    else if (this->type==1)
+    {
+      adder << "  FA_"<< format_account_number(id) <<" : fa port map ("<<this->a<<","<<this->b<<","<<this->cin<<","<<this->s<<","<<this->cout<<");";
+    }
   }
-  else if (this->type==1)
+  else
   {
-    adder << "  FA_"<< format_account_number(id) <<" : fa port map ("<<this->a<<","<<this->b<<","<<this->cin<<","<<this->s<<","<<this->cout<<");";
+    if (this->type==0)
+    {
+      adder << "  ha HA_"<< format_account_number(id) <<" ("<<this->a<<","<<this->b<<","<<this->s<<","<<this->cout<<");";
+    }
+    else if (this->type==1)
+    {
+      adder << "  fa FA_"<< format_account_number(id) <<" ("<<this->a<<","<<this->b<<","<<this->cin<<","<<this->s<<","<<this->cout<<");";
+    }
   }
   return adder.str();
 }
@@ -618,6 +644,81 @@ void vhdl_code_generation_schema(int type,int N)
 }
 
 
+
+void verilog_code_generation_schema(int type,int N)
+{
+  int i,j;
+  int id = 0;
+  int AMOUNT = Adders.size();
+  int str_i,str_j,str_it;
+  string str_add;
+  stringstream filename;
+  string s_type = "";
+  if (type==0)
+  {
+    s_type = "wallace";
+  }
+  else if (type==1)
+  {
+    s_type = "dadda";
+  }
+  filename << s_type << ".sv";
+  ofstream outfile(filename.str().c_str());
+  outfile << "module " << s_type << endl;
+  outfile << "(" << endl;
+  outfile << "  input  logic [" << to_string(N-1) << " : 0] x," << endl;
+  outfile << "  input  logic [" << to_string(N-1) << " : 0] y," << endl;
+  outfile << "  output logic [" << to_string(2*N-1) << " : 0] z0," << endl;
+  outfile << "  output logic [" << to_string(2*N-1) << " : 0] z1"<< endl;
+  outfile << ");" << endl;
+  outfile << "  timeunit 1ps;" << endl;
+  outfile << "  timeprecision 1ps;" << endl;
+  outfile << endl;
+  outfile << "  logic [" << to_string(N-1) << " : 0] P [0 : " << to_string(N-1) << "];" << endl;
+  outfile << endl;
+  outfile << "  logic [" << to_string(AMOUNT-1) << " : 0] S;" << endl;
+  outfile << "  logic [" << to_string(AMOUNT-1) << " : 0] C;" << endl;
+  outfile << endl;
+  for (i=0; i<N; i++)
+  {
+    for (j=0; j<N; j++)
+    {
+      outfile << "  assign P["<<i<<"]["<<j<<"] = x["<<i<<"] & y["<<j<<"];" << endl;
+    }
+  }
+  outfile << endl;
+  for (auto v : Adders)
+  {
+    str_add = v.Print(id,"verilog");
+    str_i = str_add.find_first_of("(");
+    str_j = str_add.find_last_of(")");
+    for (str_it = str_i+1; str_it<str_j; str_it++)
+    {
+      if (str_add[str_it] == '(')
+        str_add[str_it] = '[';
+      else if (str_add[str_it] == ')')
+        str_add[str_it] = ']';
+    }
+    outfile << str_add << endl;
+    ++id;
+  }
+  outfile << endl;
+  for (i=0; i<2; i++)
+  {
+    for (j=0; j<2*N; j++)
+    {
+      if (PP_Matrix[i][j].i < 0 && PP_Matrix[i][j].j < 0 )
+        outfile << "  assign z" << to_string(i) << "[" << to_string(j) + "] = 0;" << endl;
+      else
+        outfile << "  assign z" << to_string(i) << "[" << to_string(j) + "] = " << PP_Matrix[i][j].print("verilog") << ";" << endl;
+    }
+  }
+  outfile << endl;
+  outfile << "endmodule" << endl;
+  outfile.close();
+}
+
+
 int main(int argc, char *argv[])
 {
   int type = -1;
@@ -669,4 +770,5 @@ int main(int argc, char *argv[])
     dadda_multiplier_reduction_schema(size);
   }
   vhdl_code_generation_schema(type,size);
+  verilog_code_generation_schema(type,size);
 }

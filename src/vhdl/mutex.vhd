@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 use work.wire.all;
 
-entity multiplexer is
+entity mutex is
 	generic(
 		SIZE : natural := 1
 	);
@@ -14,9 +14,9 @@ entity multiplexer is
 		sel    : in  std_logic;
 		result : out std_logic_vector(SIZE-1 downto 0)
 	);
-end multiplexer;
+end mutex;
 
-architecture behavior of multiplexer is
+architecture behavior of mutex is
 
 begin
 

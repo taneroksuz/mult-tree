@@ -27,7 +27,7 @@ package libs is
 		);
 	end component;
 
-	component multiplexer is
+	component mutex is
 		generic(
 			SIZE : natural := 1
 		);

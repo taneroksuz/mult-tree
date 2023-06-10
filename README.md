@@ -1,3 +1,3 @@
-# VHDL Multiplier Tree Generator
+# Tree Multiplier Generator for VHDL and SystemVerilog
 
-This tool generates **Wallace** and **Dadda** multiplier tree for given **_size_** in hardware description language **vhdl**.
+This tool generates **Wallace** and **Dadda** tree multiplier for given **_size_** in hardware description language **VHDL** and **SystemVerilog**.

@@ -36,6 +36,8 @@ architecture behavior of test_adder is
 	signal reset : std_logic := '0';
 	signal clock : std_logic := '0';
 
+	signal op : std_logic;
+
 	constant empty : std_logic_vector(XLEN-1 downto 0) := (others => '0');
 
 	signal a : std_logic_vector(XLEN-1 downto 0) := (others => '0');
@@ -61,15 +63,19 @@ architecture behavior of test_adder is
 		pp : in std_logic_vector(XLEN-1 downto 0);
 		qq : in std_logic_vector(XLEN-1 downto 0);
 		rr : in std_logic_vector(XLEN-1 downto 0);
-		ss : in std_logic) is
+		ss : in std_logic;
+		tt : in std_logic) is
 		variable buf : line;
 	begin
 		if ss = '0' then
 			print(character'val(27) & "[1;32m" & "TEST SUCCEEDED" & character'val(27) & "[0m");
-			print(to_hstring(aa) & " * " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr));
 		else
-			print(character'val(27) & "[1;32m" & "TEST FAILED" & character'val(27) & "[0m");
-			print(to_hstring(aa) & " * " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr));
+			print(character'val(27) & "[1;31m" & "TEST FAILED" & character'val(27) & "[0m");
+		end if;
+		if tt = '0' then
+			print(to_hstring(aa) & " + " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr));
+		else
+			print(to_hstring(aa) & " - " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr));
 		end if;
 	end procedure check;
 
@@ -115,13 +121,8 @@ begin
 		add_o.result => p
 	);
 
-	ADDITION : if TYP = '0' generate
-		q <= std_logic_vector(unsigned(a)+unsigned(b));
-	end generate ADDITION;
-	SUBTRACTION : if TYP = '1' generate
-		q <= std_logic_vector(unsigned(a)-unsigned(b));
-	end generate SUBTRACTION;
-
+	op <= '0' when TYP = '0' else '1';
+	q <= std_logic_vector(unsigned(a)+unsigned(b)) when TYP = '0' else std_logic_vector(unsigned(a)-unsigned(b));
 	r <= p xor q;
 	s <= or(r);
 
@@ -131,7 +132,7 @@ begin
 
 		if rising_edge(clock) then
 
-			check(a,b,p,q,r,s);
+			check(a,b,p,q,r,s,op);
 
 		end if;
 

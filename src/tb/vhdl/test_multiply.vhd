@@ -67,11 +67,10 @@ architecture behavior of test_multiply is
 	begin
 		if ss = '0' then
 			print(character'val(27) & "[1;32m" & "TEST SUCCEEDED" & character'val(27) & "[0m");
-			print(to_hstring(aa) & " * " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr));
 		else
-			print(character'val(27) & "[1;32m" & "TEST FAILED" & character'val(27) & "[0m");
-			print(to_hstring(aa) & " * " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr));
+			print(character'val(27) & "[1;31m" & "TEST FAILED" & character'val(27) & "[0m");
 		end if;
+		print(to_hstring(aa) & " * " & to_hstring(bb) & " = " & to_hstring(pp) & " ^ " & to_hstring(qq) & " == " & to_hstring(rr));
 	end procedure check;
 
 begin

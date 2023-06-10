@@ -31,7 +31,7 @@ architecture behavior of cra is
 		);
 	end component;
 
-	component multiplexer is
+	component mutex is
 		generic(
 			SIZE : natural := 1
 		);
@@ -65,7 +65,7 @@ begin
 
 	sel <= and(p);
 
-	multiplexer_comp : multiplexer
+	mutex_comp : mutex
 		generic map(
 			SIZE => 1
 		)
