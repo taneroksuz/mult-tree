@@ -38,7 +38,11 @@ module test_multiply();
 	logic [0      : 0] s;
 
 	initial begin
-		$dumpfile("output.vcd");
+		if (TYP == 0) begin
+			$dumpfile("dadda.vcd");
+		end else begin
+			$dumpfile("wallace.vcd");
+		end
 		$dumpvars(0,test_multiply);
 		$urandom(SEED);
 	end

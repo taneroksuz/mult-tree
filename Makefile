@@ -1,12 +1,21 @@
-default: none
+default: all
 
 export GHDL ?= /opt/ghdl/bin/ghdl
 export VERILATOR ?= /opt/verilator/bin/verilator
-export TYPE_MUL ?= wallace# wallace dadda
-export TYPE_ADD ?= add# add sub
-export SIZE ?= 32
-export MAXTIME ?= 1000
-export LANGUAGE ?= verilog# verilog vhdl
+export BASEDIR ?= $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
+export MAXTIME ?= 1000# duration of simulation
+
+export VHDL ?= 1# 1 -> enable, 0 -> disable
+export VERILOG ?= 1# 1 -> enable, 0 -> disable
+
+export DADDA ?= 1# 1 -> enable, 0 -> disable
+export WALLACE ?= 1# 1 -> enable, 0 -> disable
+
+export ADD ?= 1# 1 -> enable, 0 -> disable
+export SUB ?= 1# 1 -> enable, 0 -> disable
+
+export SIZE ?= 32# number of bits
 
 run_mul:
 	sim/run_mul.sh
