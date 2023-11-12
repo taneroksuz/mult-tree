@@ -37,4 +37,4 @@ cd OSVVM
 
 git checkout tags/2022.05
 
-/opt/ghdl/lib/ghdl/vendors/compile-osvvm.sh --osvvm --source . --output /opt/ghdl/lib/ghdl --ghdl /opt/ghdl/bin/ghdl
+/opt/ghdl/lib/ghdl/vendors/compile-osvvm.sh --all --source . --output /opt/ghdl/lib/ghdl --ghdl /opt/ghdl/bin/ghdl
