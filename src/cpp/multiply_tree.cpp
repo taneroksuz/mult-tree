@@ -177,19 +177,20 @@ void partial_product_generation_schema(int type, int N, int M)
   {
     for (i=0; i<N; i++)
     {
-      new_i = i - 1;
+      new_i = M-1;
       for (j=0; j<M; j++)
       {
         if (i+j<M)
         {
           PP_Matrix[i][i+j].i = i;
           PP_Matrix[i][i+j].j = j;
+          new_i--; 
         }
         else
         {
           PP_Matrix[new_i][j+i].i = i;
           PP_Matrix[new_i][j+i].j = j;
-          new_i--;
+          new_i--; 
         }
       }
     }
