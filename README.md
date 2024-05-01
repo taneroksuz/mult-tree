@@ -1,6 +1,6 @@
 # Tree Multiplier Generator for VHDL and SystemVerilog
 
-This tool generates **Wallace** and **Dadda** tree multiplier for given **_size_** in hardware description language **VHDL** and **SystemVerilog**.
+This tool generates **Wallace** and **Dadda** tree multiplier in hardware description language **VHDL** and **SystemVerilog**.
 
 ## Tools
 
@@ -12,7 +12,7 @@ After running one of below commands the automatically generated design files are
 
 ## Options
 
-**SIZE** is for dimension of input vectors and **MAXTIME** is for number of iterations.
+**N**, **M** are for dimension of input vectors and **MAXTIME** is for number of iterations.
 
 ## Multiplication
 
@@ -21,13 +21,13 @@ After running one of below commands the automatically generated design files are
 #### SystemVerilog
 
 ```console
-make run_mul DADDA=1 VERILOG=1 SIZE=32 MAXTIME=1000
+make run_mul DADDA=1 VERILOG=1 N=32 M=64 MAXTIME=1000
 ```
 
 #### VHDL
 
 ```console
-make run_mul DADDA=1 VHDL=1 SIZE=32 MAXTIME=1000
+make run_mul DADDA=1 VHDL=1 N=32 M=64 MAXTIME=1000
 ```
 
 ### Wallace Tree
@@ -35,13 +35,13 @@ make run_mul DADDA=1 VHDL=1 SIZE=32 MAXTIME=1000
 #### SystemVerilog
 
 ```console
-make run_mul WALLACE=1 VERILOG=1 SIZE=32 MAXTIME=1000
+make run_mul WALLACE=1 VERILOG=1 N=32 M=64 MAXTIME=1000
 ```
 
 #### VHDL
 
 ```console
-make run_mul WALLACE=1 VHDL=1 SIZE=32 MAXTIME=1000
+make run_mul WALLACE=1 VHDL=1 N=32 M=64 MAXTIME=1000
 ```
 
 ## Addition
@@ -49,13 +49,13 @@ make run_mul WALLACE=1 VHDL=1 SIZE=32 MAXTIME=1000
 #### SystemVerilog
 
 ```console
-make run_add ADD=1 VERILOG=1 SIZE=32 MAXTIME=1000
+make run_add ADD=1 VERILOG=1 N=32 MAXTIME=1000
 ```
 
 #### VHDL
 
 ```console
-make run_add ADD=1 VHDL=1 SIZE=32 MAXTIME=1000
+make run_add ADD=1 VHDL=1 N=32 MAXTIME=1000
 ```
 
 ## Subtruction
@@ -63,11 +63,11 @@ make run_add ADD=1 VHDL=1 SIZE=32 MAXTIME=1000
 #### SystemVerilog
 
 ```console
-make run_add SUB=1 VERILOG=1 SIZE=32 MAXTIME=1000
+make run_add SUB=1 VERILOG=1 N=32 MAXTIME=1000
 ```
 
 #### VHDL
 
 ```console
-make run_add SUB=1 VHDL=1 SIZE=32 MAXTIME=1000
+make run_add SUB=1 VHDL=1 N=32 MAXTIME=1000
 ```
