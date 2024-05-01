@@ -124,15 +124,15 @@ ostream &operator<<(ostream &out, const ADD &obj)
 PP **PP_Matrix;
 list<ADD> Adders;
 
-void print_matrix(int N)
+void print_matrix(int N, int M)
 {
 #ifdef DEBUG
   int i,j;
   int value;
-  for (i=0; i<2*N; i++)
+  for (i=0; i<N+M; i++)
   {
     cout << endl;
-    for (j=0; j<2*N; j++)
+    for (j=0; j<N+M; j++)
     {
       string node = PP_Matrix[i][j].print();
       int length = 9-node.length();
@@ -148,15 +148,15 @@ void print_matrix(int N)
 #endif
 }
 
-void partial_product_generation_schema(int type, int N)
+void partial_product_generation_schema(int type, int N, int M)
 {
   int i,j,k;
   int new_i;
-  PP_Matrix = (PP**) malloc((2*N)*sizeof(PP*));
-  for (i=0; i<2*N; i++)
+  PP_Matrix = (PP**) malloc((N+M)*sizeof(PP*));
+  for (i=0; i<N+M; i++)
   {
-    PP_Matrix[i] = (PP*) malloc((2*N)*sizeof(PP));
-    for (j=0; j<2*N; j++)
+    PP_Matrix[i] = (PP*) malloc((N+M)*sizeof(PP));
+    for (j=0; j<N+M; j++)
     {
       PP_Matrix[i][j].i = -1;
       PP_Matrix[i][j].j = -1;
@@ -166,7 +166,7 @@ void partial_product_generation_schema(int type, int N)
   {
     for (i=0; i<N; i++)
     {
-      for (j=0; j<N; j++)
+      for (j=0; j<M; j++)
       {
         PP_Matrix[i][i+j].i = i;
         PP_Matrix[i][i+j].j = j;
@@ -178,9 +178,9 @@ void partial_product_generation_schema(int type, int N)
     for (i=0; i<N; i++)
     {
       new_i = i - 1;
-      for (j=0; j<N; j++)
+      for (j=0; j<M; j++)
       {
-        if (i+j<N)
+        if (i+j<M)
         {
           PP_Matrix[i][i+j].i = i;
           PP_Matrix[i][i+j].j = j;
@@ -196,7 +196,7 @@ void partial_product_generation_schema(int type, int N)
   }
 }
 
-void dadda_multiplier_reduction_schema(int N)
+void dadda_multiplier_reduction_schema(int N, int M)
 {
   unsigned int weight;
   unsigned int local_weight;
@@ -221,10 +221,10 @@ void dadda_multiplier_reduction_schema(int N)
   while (1)
   {
     weight = 0;
-    for (j=0; j<2*N; j++)
+    for (j=0; j<N+M; j++)
     {
       local_weight = 0;
-      for (i=0; i<2*N; i++)
+      for (i=0; i<N+M; i++)
       {
         if (PP_Matrix[i][j].i>=0 || PP_Matrix[i][j].j>=0)
         {
@@ -252,7 +252,7 @@ void dadda_multiplier_reduction_schema(int N)
       dadda_hight = floor(((float)dadda_hight)*((float)1.5));
     }
     restart = 0;
-    for (j=0; j<2*N; j++)
+    for (j=0; j<N+M; j++)
     {
       if (restart == 0)
       {
@@ -273,7 +273,7 @@ void dadda_multiplier_reduction_schema(int N)
         }
       }
       local_weight = c_nindex+s_index;
-      for (i=0; i<2*N; i++)
+      for (i=0; i<N+M; i++)
       {
         if (PP_Matrix[i][j].i>=0 || PP_Matrix[i][j].j>=0)
         {
@@ -284,7 +284,7 @@ void dadda_multiplier_reduction_schema(int N)
           break;
         }
       }
-      print_matrix(N);
+      print_matrix(N,M);
       if (desired_hight >= local_weight)
       {
         num = 0;
@@ -339,10 +339,10 @@ void dadda_multiplier_reduction_schema(int N)
           restart = 1;
         }
       }
-      print_matrix(N);
+      print_matrix(N,M);
       for (k=0; k<num; k++)
       {
-        for (i=0; i<2*N-1; i++)
+        for (i=0; i<N+M-1; i++)
         {
           if (PP_Matrix[i][j].i<0 && PP_Matrix[i][j].j<0)
           {
@@ -353,12 +353,12 @@ void dadda_multiplier_reduction_schema(int N)
           }
         }
       }
-      print_matrix(N);
+      print_matrix(N,M);
       if (restart == 0)
       {
         for (k=0; k<(c_nindex+s_index); k++)
         {
-          for (i=2*N-1; i>0; i--)
+          for (i=N+M-1; i>0; i--)
           {
             PP_Matrix[i][j].i = PP_Matrix[i-1][j].i;
             PP_Matrix[i][j].j = PP_Matrix[i-1][j].j;
@@ -406,13 +406,13 @@ void dadda_multiplier_reduction_schema(int N)
         }
       }
       j = j-restart;
-      print_matrix(N);
+      print_matrix(N,M);
     }
   }
 }
 
 
-void wallace_multiplier_reduction_schema(int N)
+void wallace_multiplier_reduction_schema(int N, int M)
 {
   unsigned int weight;
   unsigned int local_weight;
@@ -422,7 +422,7 @@ void wallace_multiplier_reduction_schema(int N)
   while (1)
   {
     weight = 0;
-    for (j=0; j<2*N; j++)
+    for (j=0; j<N+M; j++)
     {
       local_weight = 0;
       for (i=0; i<N; i++)
@@ -444,7 +444,7 @@ void wallace_multiplier_reduction_schema(int N)
     for (k=0; k<N; k=k+3)
     {
       local_weight = 0;
-      for (j=0; j<2*N; j++)
+      for (j=0; j<N+M; j++)
       {
         current_weight = 0;
         for (i=k; i<k+3; i++)
@@ -463,7 +463,7 @@ void wallace_multiplier_reduction_schema(int N)
       {
         break;
       }
-      for (j=2*N-1; j>=0; j--)
+      for (j=N+M-1; j>=0; j--)
       {
         current_weight = 0;
         for (i=k; i<k+3; i++)
@@ -473,7 +473,7 @@ void wallace_multiplier_reduction_schema(int N)
             ++current_weight;
           }
         }
-        print_matrix(N);
+        print_matrix(N,M);
         if (current_weight == 1)
         {
           if (PP_Matrix[k][j].i<0 && PP_Matrix[k][j].j<0 && PP_Matrix[k+1][j].i<0 && PP_Matrix[k+1][j].j<0)
@@ -539,13 +539,13 @@ void wallace_multiplier_reduction_schema(int N)
         }
       }
     }
-    print_matrix(N);
+    print_matrix(N,M);
     for (k=0; k<(weight/3); k++)
     {
       for (i=0; i<N-1; i++)
       {
         int cond = 0;
-        for (j=0; j<2*N; j++)
+        for (j=0; j<N+M; j++)
         {
           if (PP_Matrix[i][j].i>=0 || PP_Matrix[i][j].j>=0)
           {
@@ -555,7 +555,7 @@ void wallace_multiplier_reduction_schema(int N)
         }
         if (cond == 0)
         {
-          for (j=0; j<2*N; j++)
+          for (j=0; j<N+M; j++)
           {
             PP_Matrix[i][j].i = PP_Matrix[i+1][j].i;
             PP_Matrix[i][j].j = PP_Matrix[i+1][j].j;
@@ -565,13 +565,13 @@ void wallace_multiplier_reduction_schema(int N)
         }
       }
     }
-    print_matrix(N);
+    print_matrix(N,M);
   }
 }
 
 
 
-void vhdl_code_generation_schema(int type,int N)
+void vhdl_code_generation_schema(int type,int N, int M)
 {
   int i,j;
   int id = 0;
@@ -597,15 +597,15 @@ void vhdl_code_generation_schema(int type,int N)
   outfile << "port" << endl;
   outfile << "  (" << endl;
   outfile << "    x             : in  std_logic_vector(" << to_string(N-1) << " downto 0);" << endl;
-  outfile << "    y             : in  std_logic_vector(" << to_string(N-1) << " downto 0);" << endl;
-  outfile << "    z0            : out std_logic_vector(" << to_string(2*N-1) << " downto 0);" << endl;
-  outfile << "    z1            : out std_logic_vector(" << to_string(2*N-1) << " downto 0)" << endl;
+  outfile << "    y             : in  std_logic_vector(" << to_string(M-1) << " downto 0);" << endl;
+  outfile << "    z0            : out std_logic_vector(" << to_string(N+M-1) << " downto 0);" << endl;
+  outfile << "    z1            : out std_logic_vector(" << to_string(N+M-1) << " downto 0)" << endl;
   outfile << "  );" << endl;
   outfile << "end " << s_type << ";" << endl;
   outfile << endl;
   outfile << "architecture behavior of " << s_type <<" is" << endl;
   outfile << endl;
-  outfile << "type mul_type is array (0 to " << to_string(N-1) <<") of std_logic_vector(" << to_string(N-1) <<" downto 0);" << endl;
+  outfile << "type mul_type is array (0 to " << to_string(N-1) <<") of std_logic_vector(" << to_string(M-1) <<" downto 0);" << endl;
   outfile << endl;
   outfile << "signal P : mul_type;" << endl;
   outfile << endl;
@@ -616,7 +616,7 @@ void vhdl_code_generation_schema(int type,int N)
   outfile << endl;
   for (i=0; i<N; i++)
   {
-    for (j=0; j<N; j++)
+    for (j=0; j<M; j++)
     {
       outfile << "  P("<<i<<")("<<j<<") <= x("<<i<<") and y("<<j<<");" << endl;
     }
@@ -630,7 +630,7 @@ void vhdl_code_generation_schema(int type,int N)
   outfile << endl;
   for (i=0; i<2; i++)
   {
-    for (j=0; j<2*N; j++)
+    for (j=0; j<N+M; j++)
     {
       if (PP_Matrix[i][j].i < 0 && PP_Matrix[i][j].j < 0 )
         outfile << "  z" << to_string(i) << "(" << to_string(j) + ") <= '0';" << endl;
@@ -645,7 +645,7 @@ void vhdl_code_generation_schema(int type,int N)
 
 
 
-void verilog_code_generation_schema(int type,int N)
+void verilog_code_generation_schema(int type,int N, int M)
 {
   int i,j;
   int id = 0;
@@ -667,21 +667,21 @@ void verilog_code_generation_schema(int type,int N)
   outfile << "module " << s_type << endl;
   outfile << "(" << endl;
   outfile << "  input  logic [" << to_string(N-1) << " : 0] x," << endl;
-  outfile << "  input  logic [" << to_string(N-1) << " : 0] y," << endl;
-  outfile << "  output logic [" << to_string(2*N-1) << " : 0] z0," << endl;
-  outfile << "  output logic [" << to_string(2*N-1) << " : 0] z1"<< endl;
+  outfile << "  input  logic [" << to_string(M-1) << " : 0] y," << endl;
+  outfile << "  output logic [" << to_string(N+M-1) << " : 0] z0," << endl;
+  outfile << "  output logic [" << to_string(N+M-1) << " : 0] z1"<< endl;
   outfile << ");" << endl;
   outfile << "  timeunit 1ps;" << endl;
   outfile << "  timeprecision 1ps;" << endl;
   outfile << endl;
-  outfile << "  logic [" << to_string(N-1) << " : 0] P [0 : " << to_string(N-1) << "];" << endl;
+  outfile << "  logic [" << to_string(M-1) << " : 0] P [0 : " << to_string(N-1) << "];" << endl;
   outfile << endl;
   outfile << "  logic [" << to_string(AMOUNT-1) << " : 0] S;" << endl;
   outfile << "  logic [" << to_string(AMOUNT-1) << " : 0] C;" << endl;
   outfile << endl;
   for (i=0; i<N; i++)
   {
-    for (j=0; j<N; j++)
+    for (j=0; j<M; j++)
     {
       outfile << "  assign P["<<i<<"]["<<j<<"] = x["<<i<<"] & y["<<j<<"];" << endl;
     }
@@ -705,7 +705,7 @@ void verilog_code_generation_schema(int type,int N)
   outfile << endl;
   for (i=0; i<2; i++)
   {
-    for (j=0; j<2*N; j++)
+    for (j=0; j<N+M; j++)
     {
       if (PP_Matrix[i][j].i < 0 && PP_Matrix[i][j].j < 0 )
         outfile << "  assign z" << to_string(i) << "[" << to_string(j) + "] = 0;" << endl;
@@ -722,13 +722,14 @@ void verilog_code_generation_schema(int type,int N)
 int main(int argc, char *argv[])
 {
   int type = -1;
-  int size = -1;
+  int N = -1;
+  int M = -1;
   int i = 0;
-  if (argc < 3)
+  if (argc < 4)
   {
-      cout << "Usage: " << argv[0] << " <type>" << " <size>" << endl;
+      cout << "Usage: " << argv[0] << " <type>" << " <N>" << " <M> " << endl;
       cout << "Valid types: <dadda> or <wallace>" << endl;
-      cout << "Valid size: e.g. <32> for 32x32 binary multiplication" << endl;
+      cout << "Valid N,M: e.g. <32,64> for 32x64 binary multiplication" << endl;
       return 0;
   }
   if (!strcmp(argv[1],"wallace"))
@@ -746,29 +747,41 @@ int main(int argc, char *argv[])
     cout << "Invalid type choosen!" << endl;
     return 0;
   }
+  i=0;
   for (; argv[2][i] != 0; i++)
   {
       if (!isdigit(argv[2][i]))
       {
-        cout << "Invalid size given!" << endl;
+        cout << "Invalid N given!" << endl;
         return 0;
       }
   }
-  stringstream ssize(argv[2]);
-  ssize >> size;
+  i=0;
+  for (; argv[3][i] != 0; i++)
+  {
+      if (!isdigit(argv[3][i]))
+      {
+        cout << "Invalid M given!" << endl;
+        return 0;
+      }
+  }
+  stringstream dimN(argv[2]);
+  dimN >> N;
+  stringstream dimM(argv[3]);
+  dimM >> M;
 
-  cout << "Multipy-Tree size: " << size << "x" << size << endl;
+  cout << "Multipy-Tree N: " << N << " M: " << M << endl;
 
-  partial_product_generation_schema(type,size);
-  print_matrix(size);
+  partial_product_generation_schema(type,N,M);
+  print_matrix(N,M);
   if (type == 0)
   {
-    wallace_multiplier_reduction_schema(size);
+    wallace_multiplier_reduction_schema(N,M);
   }
   else if (type == 1)
   {
-    dadda_multiplier_reduction_schema(size);
+    dadda_multiplier_reduction_schema(N,M);
   }
-  vhdl_code_generation_schema(type,size);
-  verilog_code_generation_schema(type,size);
+  vhdl_code_generation_schema(type,N,M);
+  verilog_code_generation_schema(type,N,M);
 }

@@ -42,6 +42,9 @@ module test_adder();
 	logic [XLEN-1 : 0] r;
 	logic [0      : 0] s;
 
+	logic [127:0] rand_a;
+	logic [127:0] rand_b;
+
 	initial begin
 		if (TYP == 0) begin
 			$dumpfile("add.vcd");
@@ -76,8 +79,10 @@ module test_adder();
 	assign s = |(r);
 
 	always begin
-		a = $urandom();
-		b = $urandom();
+		rand_a = {$urandom(),$urandom(),$urandom(),$urandom()};
+		rand_b = {$urandom(),$urandom(),$urandom(),$urandom()};
+		a = rand_a[XLEN-1:0];
+		b = rand_b[XLEN-1:0];
 		@(posedge clock);
 		check(a,b,p,q,r,s,op);
 	end

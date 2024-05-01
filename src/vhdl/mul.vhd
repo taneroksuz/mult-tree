@@ -7,6 +7,7 @@ use work.wire.all;
 entity mul is
 	generic(
 		XLEN : natural := 32;
+		YLEN : natural := 32;
 		TYP  : std_logic := '0'
 	);
 	port(
@@ -20,26 +21,26 @@ architecture behavior of mul is
 	component dadda
 		port(
 			x  : in  std_logic_vector(XLEN-1 downto 0);
-			y  : in  std_logic_vector(XLEN-1 downto 0);
-			z0 : out std_logic_vector(2*XLEN-1 downto 0);
-			z1 : out std_logic_vector(2*XLEN-1 downto 0)
+			y  : in  std_logic_vector(YLEN-1 downto 0);
+			z0 : out std_logic_vector(XLEN+YLEN-1 downto 0);
+			z1 : out std_logic_vector(XLEN+YLEN-1 downto 0)
 		);
 	end component;
 
 	component wallace
 		port(
 			x  : in  std_logic_vector(XLEN-1 downto 0);
-			y  : in  std_logic_vector(XLEN-1 downto 0);
-			z0 : out std_logic_vector(2*XLEN-1 downto 0);
-			z1 : out std_logic_vector(2*XLEN-1 downto 0)
+			y  : in  std_logic_vector(YLEN-1 downto 0);
+			z0 : out std_logic_vector(XLEN+YLEN-1 downto 0);
+			z1 : out std_logic_vector(XLEN+YLEN-1 downto 0)
 		);
 	end component;
 
 	signal a  : std_logic_vector(XLEN-1 downto 0);
-	signal b  : std_logic_vector(XLEN-1 downto 0);
+	signal b  : std_logic_vector(YLEN-1 downto 0);
 
-	signal z0 : std_logic_vector(2*XLEN-1 downto 0);
-	signal z1 : std_logic_vector(2*XLEN-1 downto 0);
+	signal z0 : std_logic_vector(XLEN+YLEN-1 downto 0);
+	signal z1 : std_logic_vector(XLEN+YLEN-1 downto 0);
 
 begin
 

@@ -6,10 +6,10 @@ module test_multiply();
 
 	task check(
 		input logic [XLEN-1 : 0] aa,
-		input logic [XLEN-1 : 0] bb,
-		input logic [2*XLEN-1 : 0] pp,
-		input logic [2*XLEN-1 : 0] qq,
-		input logic [2*XLEN-1 : 0] rr,
+		input logic [YLEN-1 : 0] bb,
+		input logic [XLEN+YLEN-1 : 0] pp,
+		input logic [XLEN+YLEN-1 : 0] qq,
+		input logic [XLEN+YLEN-1 : 0] rr,
 		input logic [0      : 0] ss
 	);
 		begin
@@ -31,11 +31,14 @@ module test_multiply();
 	logic op;
 
 	logic [XLEN-1 : 0] a; 
-	logic [XLEN-1 : 0] b;
-	logic [2*XLEN-1 : 0] p;
-	logic [2*XLEN-1 : 0] q;
-	logic [2*XLEN-1 : 0] r;
+	logic [YLEN-1 : 0] b;
+	logic [XLEN+YLEN-1 : 0] p;
+	logic [XLEN+YLEN-1 : 0] q;
+	logic [XLEN+YLEN-1 : 0] r;
 	logic [0      : 0] s;
+
+	logic [127:0] rand_a;
+	logic [127:0] rand_b;
 
 	initial begin
 		if (TYP == 0) begin
@@ -57,6 +60,7 @@ module test_multiply();
 
 	mul #(
 		.XLEN (XLEN),
+		.YLEN (YLEN),
 		.TYP (TYP)
 	) mul_comp
 	(
@@ -70,8 +74,10 @@ module test_multiply();
 	assign s = |(r);
 
 	always begin
-		a = $urandom();
-		b = $urandom();
+		rand_a = {$urandom(),$urandom(),$urandom(),$urandom()};
+		rand_b = {$urandom(),$urandom(),$urandom(),$urandom()};
+		a = rand_a[XLEN-1:0];
+		b = rand_b[YLEN-1:0];
 		@(posedge clock);
 		check(a,b,p,q,r,s);
 	end

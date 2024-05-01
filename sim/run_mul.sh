@@ -15,8 +15,8 @@ then
 
   TIME=$(date +%s)
 
-  ./multiply_tree dadda $SIZE
-  ./multiply_tree wallace $SIZE
+  ./multiply_tree dadda $N $M
+  ./multiply_tree wallace $N $M
   mv dadda.vhd $BASEDIR/src/vhdl/
   mv wallace.vhd $BASEDIR/src/vhdl/
 
@@ -39,7 +39,8 @@ then
     echo "use ieee.numeric_std.all;" >> configure.vhd
     echo "" >> configure.vhd
     echo "package configure is" >> configure.vhd
-    echo "  constant XLEN : integer := "$SIZE";" >> configure.vhd
+    echo "  constant XLEN : integer := "$N";" >> configure.vhd
+    echo "  constant YLEN : integer := "$M";" >> configure.vhd
     echo "  constant SEED : integer := "$TIME";" >> configure.vhd
     echo "  constant TYP  : std_logic := '"0"';" >> configure.vhd
     echo "end package;" >> configure.vhd
@@ -81,7 +82,8 @@ then
     echo "use ieee.numeric_std.all;" >> configure.vhd
     echo "" >> configure.vhd
     echo "package configure is" >> configure.vhd
-    echo "  constant XLEN : integer := "$SIZE";" >> configure.vhd
+    echo "  constant XLEN : integer := "$N";" >> configure.vhd
+    echo "  constant YLEN : integer := "$M";" >> configure.vhd
     echo "  constant SEED : integer := "$TIME";" >> configure.vhd
     echo "  constant TYP  : std_logic := '"1"';" >> configure.vhd
     echo "end package;" >> configure.vhd
@@ -117,8 +119,8 @@ then
 
   TIME=$(date +%s)
 
-  ./multiply_tree dadda $SIZE
-  ./multiply_tree wallace $SIZE
+  ./multiply_tree dadda $N $M
+  ./multiply_tree wallace $N $M
   mv dadda.sv $BASEDIR/src/verilog/
   mv wallace.sv $BASEDIR/src/verilog/
 
@@ -136,7 +138,8 @@ then
     echo "  timeunit 1ps;" >> configure.sv
     echo "  timeprecision 1ps;" >> configure.sv
     echo "" >> configure.sv
-    echo "  parameter XLEN = "$SIZE";" >> configure.sv
+    echo "  parameter XLEN = "$N";" >> configure.sv
+    echo "  parameter YLEN = "$M";" >> configure.sv
     echo "  parameter TYP = "0";" >> configure.sv
     echo "  integer MAXTIME = "$MAXTIME";" >> configure.sv
     echo "  integer SEED = "$TIME";" >> configure.sv
@@ -174,7 +177,8 @@ then
     echo "  timeunit 1ps;" >> configure.sv
     echo "  timeprecision 1ps;" >> configure.sv
     echo "" >> configure.sv
-    echo "  parameter XLEN = "$SIZE";" >> configure.sv
+    echo "  parameter XLEN = "$N";" >> configure.sv
+    echo "  parameter YLEN = "$M";" >> configure.sv
     echo "  parameter TYP = "1";" >> configure.sv
     echo "  integer MAXTIME = "$MAXTIME";" >> configure.sv
     echo "  integer SEED = "$TIME";" >> configure.sv

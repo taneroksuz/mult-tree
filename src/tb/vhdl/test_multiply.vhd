@@ -19,6 +19,7 @@ use std.env.all;
 entity test_multiply is
 	generic(
 		XLEN : natural := XLEN;
+		YLEN : natural := YLEN;
 		TYP  : std_logic := TYP
 	);
 end entity test_multiply;
@@ -39,10 +40,10 @@ architecture behavior of test_multiply is
 	constant empty : std_logic_vector(XLEN-1 downto 0) := (others => '0');
 
 	signal a : std_logic_vector(XLEN-1 downto 0) := (others => '0');
-	signal b : std_logic_vector(XLEN-1 downto 0) := (others => '0');
-	signal p : std_logic_vector(2*XLEN-1 downto 0) := (others => '0');
-	signal q : std_logic_vector(2*XLEN-1 downto 0) := (others => '0');
-	signal r : std_logic_vector(2*XLEN-1 downto 0) := (others => '0');
+	signal b : std_logic_vector(YLEN-1 downto 0) := (others => '0');
+	signal p : std_logic_vector(XLEN+YLEN-1 downto 0) := (others => '0');
+	signal q : std_logic_vector(XLEN+YLEN-1 downto 0) := (others => '0');
+	signal r : std_logic_vector(XLEN+YLEN-1 downto 0) := (others => '0');
 	signal s : std_logic := '0';
 
 	component mul
@@ -58,10 +59,10 @@ architecture behavior of test_multiply is
 
 	procedure check(
 		aa : in std_logic_vector(XLEN-1 downto 0);
-		bb : in std_logic_vector(XLEN-1 downto 0);
-		pp : in std_logic_vector(2*XLEN-1 downto 0);
-		qq : in std_logic_vector(2*XLEN-1 downto 0);
-		rr : in std_logic_vector(2*XLEN-1 downto 0);
+		bb : in std_logic_vector(YLEN-1 downto 0);
+		pp : in std_logic_vector(XLEN+YLEN-1 downto 0);
+		qq : in std_logic_vector(XLEN+YLEN-1 downto 0);
+		rr : in std_logic_vector(XLEN+YLEN-1 downto 0);
 		ss : in std_logic) is
 		variable buf : line;
 	begin
@@ -107,6 +108,7 @@ begin
 	mul_comp : mul
 	generic map(
 		XLEN => XLEN,
+		YLEN => YLEN,
 		TYP  => TYP
 	)
 	port map(

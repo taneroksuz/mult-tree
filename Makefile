@@ -1,12 +1,13 @@
 default: all
 
-export GHDL ?= /opt/ghdl/bin/ghdl
-export VERILATOR ?= /opt/verilator/bin/verilator
+export GHDL ?= /usr/local/bin/ghdl
+export VERILATOR ?= /usr/local/bin/verilator
 export BASEDIR ?= $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 export MAXTIME ?= 1000# duration of simulation
 
-export SIZE ?= 32# number of bits
+export N ?= 32# number of bits
+export M ?= 64# number of bits
 
 export VHDL ?= 0# 1 -> enable, 0 -> disable
 export VERILOG ?= 0# 1 -> enable, 0 -> disable
