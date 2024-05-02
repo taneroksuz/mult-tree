@@ -4,10 +4,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_textio.all;
-
-library osvvm;
-use osvvm.randombasepkg.all;
-use osvvm.randompkg.all;
+use ieee.math_real.all;
 
 use work.configure.all;
 use work.wire.all;
@@ -26,6 +23,19 @@ end entity test_multiply;
 
 architecture behavior of test_multiply is
 
+	impure function rand_slv(len : integer; seed : integer) return std_logic_vector is
+		variable r : real;
+		variable s : integer;
+		variable slv : std_logic_vector(len - 1 downto 0);
+	begin
+		s := seed;
+		for i in slv'range loop
+			uniform(s, s, r);
+			slv(i) := '1' when r > 0.5 else '0';
+		end loop;
+		return slv;
+	end function;
+
 	procedure print(
 		msg : in string) is
 		variable buf : line;
@@ -34,10 +44,14 @@ architecture behavior of test_multiply is
 		writeline(output, buf);
 	end procedure print;
 
+	signal seed0 : integer := SEED;
+	signal seed1 : integer := SEED;
+
 	signal reset : std_logic := '0';
 	signal clock : std_logic := '0';
 
-	constant empty : std_logic_vector(XLEN-1 downto 0) := (others => '0');
+	constant empty_a : std_logic_vector(XLEN-1 downto 0) := (others => '0');
+	constant empty_b : std_logic_vector(YLEN-1 downto 0) := (others => '0');
 
 	signal a : std_logic_vector(XLEN-1 downto 0) := (others => '0');
 	signal b : std_logic_vector(YLEN-1 downto 0) := (others => '0');
@@ -49,6 +63,7 @@ architecture behavior of test_multiply is
 	component mul
 		generic(
 			XLEN : natural := 32;
+			YLEN : natural := 32;
 			TYP  : std_logic := '0'
 		);
 		port(
@@ -81,23 +96,22 @@ begin
 
 	process(reset, clock)
 
-		variable rv : randomptype;
-
 	begin
 
 		if rising_edge(clock) then
 
 			if reset = '0' then
 
-				a <= empty;
-				b <= empty;
-
-				rv.initseed(SEED);
+				a <= empty_a;
+				b <= empty_b;
 
 			else
 
-				a <= rv.randslv(XLEN);
-				b <= rv.randslv(XLEN);
+				a <= rand_slv(XLEN,seed0);
+				b <= rand_slv(YLEN,seed1);
+
+				seed0 <= seed0-1;
+				seed1 <= seed1+1;
 
 			end if;
 

@@ -4,10 +4,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.std_logic_textio.all;
-
-library osvvm;
-use osvvm.randombasepkg.all;
-use osvvm.randompkg.all;
+use ieee.math_real.all;
 
 use work.configure.all;
 use work.wire.all;
@@ -25,6 +22,19 @@ end entity test_adder;
 
 architecture behavior of test_adder is
 
+	impure function rand_slv(len : integer; seed : integer) return std_logic_vector is
+		variable r : real;
+		variable s : integer;
+		variable slv : std_logic_vector(len - 1 downto 0);
+	begin
+		s := seed;
+		for i in slv'range loop
+			uniform(s, s, r);
+			slv(i) := '1' when r > 0.5 else '0';
+		end loop;
+		return slv;
+	end function;
+
 	procedure print(
 		msg : in string) is
 		variable buf : line;
@@ -32,6 +42,9 @@ architecture behavior of test_adder is
 		write(buf, msg);
 		writeline(output, buf);
 	end procedure print;
+
+	signal seed0 : integer := SEED;
+	signal seed1 : integer := SEED;
 
 	signal reset : std_logic := '0';
 	signal clock : std_logic := '0';
@@ -86,8 +99,6 @@ begin
 
 	process(reset, clock)
 
-		variable rv : randomptype;
-
 	begin
 
 		if rising_edge(clock) then
@@ -97,12 +108,13 @@ begin
 				a <= empty;
 				b <= empty;
 
-				rv.initseed(SEED);
-
 			else
 
-				a <= rv.randslv(XLEN);
-				b <= rv.randslv(XLEN);
+				a <= rand_slv(XLEN,seed0);
+				b <= rand_slv(XLEN,seed1);
+
+				seed0 <= seed0-1;
+				seed1 <= seed1+1;
 
 			end if;
 

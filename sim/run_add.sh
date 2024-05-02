@@ -31,6 +31,7 @@ then
     echo "" >> configure.vhd
     echo "package configure is" >> configure.vhd
     echo "  constant XLEN : integer := "$N";" >> configure.vhd
+    echo "  constant YLEN : integer := "$M";" >> configure.vhd
     echo "  constant SEED : integer := "$TIME";" >> configure.vhd
     echo "  constant TYP  : std_logic := '"0"';" >> configure.vhd
     echo "end package;" >> configure.vhd
@@ -73,6 +74,7 @@ then
     echo "" >> configure.vhd
     echo "package configure is" >> configure.vhd
     echo "  constant XLEN : integer := "$N";" >> configure.vhd
+    echo "  constant YLEN : integer := "$M";" >> configure.vhd
     echo "  constant SEED : integer := "$TIME";" >> configure.vhd
     echo "  constant TYP  : std_logic := '"1"';" >> configure.vhd
     echo "end package;" >> configure.vhd
@@ -123,6 +125,7 @@ then
     echo "  timeprecision 1ps;" >> configure.sv
     echo "" >> configure.sv
     echo "  parameter XLEN = "$N";" >> configure.sv
+    echo "  parameter YLEN = "$M";" >> configure.sv
     echo "  integer MAXTIME = "$MAXTIME";" >> configure.sv
     echo "  integer SEED = "$TIME";" >> configure.sv
     echo "  logic TYP = "0";" >> configure.sv
@@ -160,6 +163,7 @@ then
     echo "  timeprecision 1ps;" >> configure.sv
     echo "" >> configure.sv
     echo "  parameter XLEN = "$N";" >> configure.sv
+    echo "  parameter YLEN = "$M";" >> configure.sv
     echo "  integer MAXTIME = "$MAXTIME";" >> configure.sv
     echo "  integer SEED = "$TIME";" >> configure.sv
     echo "  logic TYP = "1";" >> configure.sv

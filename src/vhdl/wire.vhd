@@ -18,11 +18,11 @@ package wire is
 
 	type mul_in_type is record
 		a : std_logic_vector(XLEN-1 downto 0);
-		b : std_logic_vector(XLEN-1 downto 0);
+		b : std_logic_vector(YLEN-1 downto 0);
 	end record;
 
 	type mul_out_type is record
-		c : std_logic_vector(2*XLEN-1 downto 0);
+		c : std_logic_vector(XLEN+YLEN-1 downto 0);
 	end record;
 
 end package;
