@@ -1,5 +1,10 @@
 import configure::*;
 
+class rng;
+	rand bit [XLEN-1 : 0] a;
+	rand bit [YLEN-1 : 0] b;
+endclass
+
 module test_multiply();
 	timeunit 1ps;
 	timeprecision 1ps;
@@ -30,15 +35,19 @@ module test_multiply();
 
 	logic op;
 
-	logic [XLEN-1 : 0] a; 
-	logic [YLEN-1 : 0] b;
+	logic [XLEN-1      : 0] a; 
+	logic [YLEN-1      : 0] b;
 	logic [XLEN+YLEN-1 : 0] p;
 	logic [XLEN+YLEN-1 : 0] q;
 	logic [XLEN+YLEN-1 : 0] r;
-	logic [0      : 0] s;
+	logic [0           : 0] s;
 
-	logic [127:0] rand_a;
-	logic [127:0] rand_b;
+	rng gen;
+
+	initial begin
+		gen = new();
+		gen.srandom(SEED);
+	end
 
 	initial begin
 		if (TYP == 0) begin
@@ -47,7 +56,6 @@ module test_multiply();
 			$dumpfile("wallace.vcd");
 		end
 		$dumpvars(0,test_multiply);
-		$urandom(SEED);
 	end
 
 	initial begin
@@ -74,10 +82,10 @@ module test_multiply();
 	assign s = |(r);
 
 	always begin
-		rand_a = {$urandom(),$urandom(),$urandom(),$urandom()};
-		rand_b = {$urandom(),$urandom(),$urandom(),$urandom()};
-		a = rand_a[XLEN-1:0];
-		b = rand_b[YLEN-1:0];
+		/* verilator lint_off IGNOREDRETURN */
+		gen.randomize();
+		a = gen.a;
+		b = gen.b;
 		@(posedge clock);
 		check(a,b,p,q,r,s);
 	end

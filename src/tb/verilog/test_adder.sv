@@ -1,5 +1,10 @@
 import configure::*;
 
+class rng;
+	rand bit [XLEN-1 : 0] a;
+	rand bit [XLEN-1 : 0] b;
+endclass
+
 module test_adder();
 	timeunit 1ps;
 	timeprecision 1ps;
@@ -42,8 +47,12 @@ module test_adder();
 	logic [XLEN-1 : 0] r;
 	logic [0      : 0] s;
 
-	logic [127:0] rand_a;
-	logic [127:0] rand_b;
+	rng gen;
+
+	initial begin
+		gen = new();
+		gen.srandom(SEED);
+	end
 
 	initial begin
 		if (TYP == 0) begin
@@ -52,7 +61,6 @@ module test_adder();
 			$dumpfile("sub.vcd");
 		end
 		$dumpvars(0,test_adder);
-		$urandom(SEED);
 	end
 
 	initial begin
@@ -79,10 +87,10 @@ module test_adder();
 	assign s = |(r);
 
 	always begin
-		rand_a = {$urandom(),$urandom(),$urandom(),$urandom()};
-		rand_b = {$urandom(),$urandom(),$urandom(),$urandom()};
-		a = rand_a[XLEN-1:0];
-		b = rand_b[XLEN-1:0];
+		/* verilator lint_off IGNOREDRETURN */
+		gen.randomize();
+		a = gen.a;
+		b = gen.b;
 		@(posedge clock);
 		check(a,b,p,q,r,s,op);
 	end
