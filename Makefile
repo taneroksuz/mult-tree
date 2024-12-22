@@ -24,4 +24,8 @@ run_mul:
 run_add:
 	sim/run_add.sh
 
+tool:
+	tools/install-ghdl.sh
+	tools/install-verilator.sh
+
 all: run_mul run_add
