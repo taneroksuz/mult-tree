@@ -4,7 +4,11 @@ This tool generates **Wallace** and **Dadda** tree multiplier in hardware descri
 
 ## Tools
 
-The installation scripts of necessary tools are located in directory **tools**. These scripts need **root** permission in order to install packages and tools for simulation. Please run these scripts in directory **tools** locally.
+The installation scripts of necessary tools are located in directory **tools**. These scripts need **root** permission in order to install packages and tools for simulation.
+
+```console
+make tool
+```
 
 ## Design Files
 
